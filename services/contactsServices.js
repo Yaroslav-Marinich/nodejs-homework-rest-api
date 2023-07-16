@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("node:crypto");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join(__dirname, "..", "models", "contacts.json");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, "utf-8");
@@ -29,12 +29,13 @@ const removeContact = async (id) => {
 };
 
 const addContact = async (body) => {
+  console.log(body)
   const contacts = await listContacts();
   const newContact = {
     id: crypto.randomUUID(),
     ...body,
   };
-
+  console.log(newContact);
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
@@ -46,10 +47,23 @@ const updateContact = async (id, body) => {
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = { id, ...body };
+
+  // Retrieve the existing contact
+  const existingContact = contacts[idx];
+
+  // Update the name field if provided in the body
+  const updatedContact = {
+    id: existingContact.id,
+    name: body.name || existingContact.name,
+    email: existingContact.email,
+    phone: existingContact.phone,
+  };
+
+  contacts[idx] = updatedContact;
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[idx];
+  return updatedContact;
 };
+
 
 module.exports = {
   listContacts,
