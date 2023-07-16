@@ -48,15 +48,13 @@ const updateContact = async (id, body) => {
     return null;
   }
 
-  // Retrieve the existing contact
   const existingContact = contacts[idx];
 
-  // Update the name field if provided in the body
   const updatedContact = {
     id: existingContact.id,
     name: body.name || existingContact.name,
-    email: existingContact.email,
-    phone: existingContact.phone,
+    email: body.email || existingContact.email,
+    phone: body.phone || existingContact.phone,
   };
 
   contacts[idx] = updatedContact;
