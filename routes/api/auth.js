@@ -1,6 +1,11 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/auth");
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+} = require("../../controllers/auth");
 
 const { validateBody, authenticate } = require("../../middlewares");
 
@@ -11,13 +16,13 @@ const router = express.Router();
 router.post(
   "/users/register",
   validateBody(registerAndLoginSchema),
-  ctrl.register
+  register
 );
 
-router.post("/users/login", validateBody(registerAndLoginSchema), ctrl.login);
+router.post("/users/login", validateBody(registerAndLoginSchema), login);
 
-router.get("/users/current", authenticate, ctrl.getCurrent);
+router.get("/users/current", authenticate, getCurrent);
 
-router.post("/users/logout", authenticate, ctrl.logout);
+router.post("/users/logout", authenticate, logout);
 
 module.exports = router;
