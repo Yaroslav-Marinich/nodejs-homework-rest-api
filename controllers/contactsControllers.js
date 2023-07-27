@@ -2,9 +2,13 @@ const Contact = require("../models/contacts");
 const ctrlWrapper = require("../helpers/ctrlWraper");
 const { HttpError } = require("../helpers/HttpError");
 
-const getAll = async (_, res) => {
-  const result = await Contact.find();
-  res.json(result);
+const getAll = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    throw new HttpError(404, "Not Found");
+  }
+  res.status(200).json(result);
 };
 
 const getContactById = async (req, res) => {
@@ -17,7 +21,8 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
