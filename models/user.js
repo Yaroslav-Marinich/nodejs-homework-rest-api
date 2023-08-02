@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const handleMongooseError = require("./../helpers/handleMongooseError");
+const {handleMongooseError} = require("./../helpers/index");
 
 const userSchema = new Schema(
   {
@@ -19,11 +19,20 @@ const userSchema = new Schema(
     },
     token: {
       type: String,
-      default: ""
+      default: "",
     },
     avatarURL: {
       type: String,
       required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }

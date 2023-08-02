@@ -1,6 +1,5 @@
 const Contact = require("../models/contacts");
-const ctrlWrapper = require("../helpers/ctrlWraper");
-const { HttpError } = require("../helpers/HttpError");
+const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 const getAll = async (req, res) => {
   const { contactId } = req.params;
