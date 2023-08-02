@@ -6,11 +6,16 @@ const {
   getCurrent,
   logout,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/auth");
 
 const { validateBody, authenticate, upload } = require("../../middlewares");
 
-const { registerAndLoginSchema } = require("../../schemas/users");
+const {
+  registerAndLoginSchema,
+  emailVerifySchema,
+} = require("../../schemas/users");
 
 const router = express.Router();
 
@@ -18,6 +23,14 @@ router.post(
   "/users/register",
   validateBody(registerAndLoginSchema),
   register
+);
+
+router.get("/users/verify/:verificationToken", verifyEmail);
+
+router.post(
+  "/users/verify",
+  validateBody(emailVerifySchema),
+  resendVerifyEmail
 );
 
 router.post("/users/login", validateBody(registerAndLoginSchema), login);
